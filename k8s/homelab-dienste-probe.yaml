@@ -1,0 +1,53 @@
+{
+ "apiVersion": "monitoring.coreos.com/v1",
+ "kind": "Probe",
+ "metadata": {
+  "name": "homelab-dienste",
+  "namespace": "monitoring",
+  "labels": {
+   "release": "kps"
+  },
+  "annotations": {
+   "hinweis": "sissyphus:8000 und jarvis-browser sind per NetworkPolicy gegen Proben gesperrt – im Dashboard ueber kube-state-metrics"
+  }
+ },
+ "spec": {
+  "interval": "60s",
+  "jobName": "homelab-dienste",
+  "module": "tcp_connect",
+  "prober": {
+   "path": "/probe",
+   "url": "blackbox-exporter.monitoring.svc.cluster.local:9115"
+  },
+  "targets": {
+   "staticConfig": {
+    "labels": {
+     "gruppe": "homelab"
+    },
+    "static": [
+     "jarvis-proxy.sissyphus.svc.cluster.local:443",
+     "worldmonitor.worldmonitor.svc.cluster.local:80",
+     "gitea.gitea.svc.cluster.local:3000",
+     "n8n.n8n.svc.cluster.local:5678",
+     "crm.crm.svc.cluster.local:443",
+     "servicedesk.servicedesk.svc.cluster.local:443",
+     "portal.portal.svc.cluster.local:443",
+     "nextcloud.nextcloud.svc.cluster.local:80",
+     "authentik-server.authentik.svc.cluster.local:80",
+     "vaultwarden.vaultwarden.svc.cluster.local:80",
+     "headlamp.headlamp.svc.cluster.local:80",
+     "benzmotion.benzmotion.svc.cluster.local:3000",
+     "mysql.database.svc.cluster.local:3306",
+     "qdrant.vector.svc.cluster.local:6333",
+     "ddr-web.ddr.svc.cluster.local:443",
+     "afd-web.afd.svc.cluster.local:443",
+     "ticket-bot-metrics.discord.svc.cluster.local:5000",
+     "podcast-werk.discord.svc.cluster.local:8000",
+     "ziti-controller-client.ziti.svc.cluster.local:443",
+     "kinoraum.kinoraum.svc.cluster.local:80",
+     "konsole.agentic-os.svc.cluster.local:443"
+    ]
+   }
+  }
+ }
+}

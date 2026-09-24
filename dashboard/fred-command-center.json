@@ -1,0 +1,3766 @@
+{
+ "uid": "fred-command-center",
+ "title": "🟣 Fred · Command Center",
+ "description": "Discord-Statistik, Weltkarte, Kameras, Homelab und Jarvis auf einen Blick.",
+ "tags": [
+  "fred",
+  "discord",
+  "homelab",
+  "jarvis",
+  "kameras"
+ ],
+ "timezone": "browser",
+ "editable": true,
+ "graphTooltip": 1,
+ "refresh": "1m",
+ "time": {
+  "from": "now-24h",
+  "to": "now"
+ },
+ "timepicker": {
+  "refresh_intervals": [
+   "30s",
+   "1m",
+   "5m",
+   "15m"
+  ]
+ },
+ "fiscalYearStartMonth": 0,
+ "liveNow": false,
+ "schemaVersion": 41,
+ "version": 1,
+ "links": [],
+ "annotations": {
+  "list": []
+ },
+ "templating": {
+  "list": []
+ },
+ "panels": [
+  {
+   "type": "text",
+   "id": 1,
+   "title": "",
+   "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 24,
+    "h": 4
+   },
+   "transparent": true,
+   "options": {
+    "mode": "html",
+    "content": "\n<style>\n.fcc{position:relative;height:100%;display:flex;align-items:center;gap:22px;padding:0 22px;\n border-radius:10px;overflow:hidden;font-family:Inter,system-ui,sans-serif;\n background:radial-gradient(1200px 200px at 0% 0%,rgba(139,92,246,.35),transparent 60%),\n radial-gradient(900px 220px at 100% 100%,rgba(34,211,238,.22),transparent 60%),#0b1020;}\n.fcc:after{content:\"\";position:absolute;inset:0;pointer-events:none;\n background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px);}\n.fcc .kern{width:54px;height:54px;border-radius:50%;flex:none;\n background:radial-gradient(circle at 35% 35%,#c4b5fd,#8b5cf6 45%,#312e81 80%);\n box-shadow:0 0 24px #8b5cf6,0 0 60px rgba(34,211,238,.35);animation:fccp 3.2s ease-in-out infinite;}\n@keyframes fccp{0%,100%{transform:scale(1);box-shadow:0 0 18px #8b5cf6,0 0 40px rgba(34,211,238,.25)}\n 50%{transform:scale(1.07);box-shadow:0 0 34px #8b5cf6,0 0 80px rgba(34,211,238,.5)}}\n.fcc h1{margin:0;font-size:28px;letter-spacing:.14em;font-weight:800;color:#f5f3ff;line-height:1}\n.fcc h1 b{color:#22d3ee;font-weight:800}\n.fcc p{margin:6px 0 0;color:#a5b4fc;font-size:13px;letter-spacing:.04em}\n.fcc nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}\n.fcc nav a{color:#e0e7ff;text-decoration:none;font-size:12px;padding:6px 11px;border-radius:999px;\n border:1px solid rgba(165,180,252,.35);background:rgba(15,23,42,.6)}\n.fcc nav a:hover{border-color:#22d3ee;color:#22d3ee}\n@media (max-width:900px){.fcc nav{display:none}.fcc h1{font-size:20px}}\n</style>\n<div class=\"fcc\"><div class=\"kern\"></div>\n<div><h1>FRED <b>·</b> COMMAND CENTER</h1>\n<p>Dialog der Religionen · Discord · Weltlage · Kameras · Homelab · Jarvis</p></div>\n<nav>\n<a href=\"https://jarvis.benz-sw.de/jarvis\" target=\"_blank\" rel=\"noopener\">🤖 Jarvis</a>\n<a href=\"https://monitor.benz-sw.de\" target=\"_blank\" rel=\"noopener\">🌍 Lagebild</a>\n<a href=\"/d/sissyphus-aio\" >🚀 Sissyphus CC</a>\n<a href=\"/d/openziti-overlay\">🛡️ Ziti</a>\n<a href=\"https://headlamp.benz-sw.de\" target=\"_blank\" rel=\"noopener\">☸️ Headlamp</a>\n<a href=\"https://gitea.benz-sw.de\" target=\"_blank\" rel=\"noopener\">🐙 Gitea</a>\n</nav></div>\n"
+   }
+  },
+  {
+   "type": "stat",
+   "id": 2,
+   "title": "Fred",
+   "description": "Läuft der Bot-Pod ticket-bot (ns discord)?",
+   "gridPos": {
+    "x": 0,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(kube_deployment_status_replicas_available{namespace=\"discord\",deployment=\"ticket-bot\"}) or vector(0)",
+     "legendFormat": "",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [
+      {
+       "type": "range",
+       "options": {
+        "from": 1,
+        "to": 99,
+        "result": {
+         "text": "ONLINE",
+         "color": "#22c55e"
+        }
+       }
+      },
+      {
+       "type": "value",
+       "options": {
+        "0": {
+         "text": "OFFLINE",
+         "color": "#ef4444"
+        }
+       }
+      }
+     ],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#ef4444",
+        "value": null
+       },
+       {
+        "color": "#22c55e",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 3,
+   "title": "Mitglieder",
+   "description": "Discord-REST approximate_member_count (fred-relay)",
+   "gridPos": {
+    "x": 3,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(discord_members_total)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#8b5cf6"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#8b5cf6",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 4,
+   "title": "Online",
+   "description": "Discord-REST approximate_presence_count",
+   "gridPos": {
+    "x": 6,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(discord_online_total)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22c55e"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 5,
+   "title": "Nachrichten 24 h",
+   "description": "Menschen, ohne Bots, ohne gelöschte",
+   "gridPos": {
+    "x": 9,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT COUNT(*) AS n FROM fred_archiv_oeffentlich WHERE zeit > UTC_TIMESTAMP() - INTERVAL 1 DAY AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22d3ee"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22d3ee",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 6,
+   "title": "Fred antwortet 24 h",
+   "description": "",
+   "gridPos": {
+    "x": 12,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT COUNT(*) AS n FROM fred_archiv_oeffentlich WHERE zeit > UTC_TIMESTAMP() - INTERVAL 1 DAY AND user_id = 1413591205047959674"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#8b5cf6"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#8b5cf6",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 7,
+   "title": "Aktive Köpfe 24 h",
+   "description": "",
+   "gridPos": {
+    "x": 15,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT COUNT(DISTINCT user_id) AS n FROM fred_archiv_oeffentlich WHERE zeit > UTC_TIMESTAMP() - INTERVAL 1 DAY AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#f59e0b"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#f59e0b",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 8,
+   "title": "Im Voice jetzt",
+   "description": "",
+   "gridPos": {
+    "x": 18,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT COUNT(*) AS n FROM fred_voice_sitzungen WHERE ende IS NULL AND zuletzt > UTC_TIMESTAMP() - INTERVAL 5 MINUTE"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22c55e"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 9,
+   "title": "Archiv gesamt",
+   "description": "Alle archivierten Nachrichten seit 2023",
+   "gridPos": {
+    "x": 21,
+    "y": 4,
+    "w": 3,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(fred_archiv_nachrichten)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#94a3b8"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#94a3b8",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "row",
+   "id": 10,
+   "title": "💬 Discord · Dialog der Religionen · Fred",
+   "gridPos": {
+    "x": 0,
+    "y": 8,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": false,
+   "panels": []
+  },
+  {
+   "type": "timeseries",
+   "id": 11,
+   "title": "Nachrichten pro Stunde",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 9,
+    "w": 12,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "time_series",
+     "rawSql": "SELECT $__timeGroupAlias(zeit, '1h'), SUM(bot = 0 AND user_id <> 1413591205047959674) AS Menschen, SUM(user_id = 1413591205047959674) AS Fred FROM fred_archiv_oeffentlich WHERE $__timeFilter(zeit) AND geloescht IS NULL GROUP BY 1 ORDER BY 1"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "bars",
+      "lineWidth": 2,
+      "fillOpacity": 70,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "normal",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Menschen"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#22d3ee"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Fred"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#8b5cf6"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 12,
+   "title": "Nachrichten pro Tag · 90 Tage",
+   "description": "",
+   "gridPos": {
+    "x": 12,
+    "y": 9,
+    "w": 12,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "time_series",
+     "rawSql": "SELECT $__timeGroupAlias(zeit, '1d'), COUNT(*) AS Nachrichten, COUNT(DISTINCT user_id) AS Köpfe FROM fred_archiv_oeffentlich WHERE $__timeFilter(zeit) AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL GROUP BY 1 ORDER BY 1"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "bars",
+      "lineWidth": 2,
+      "fillOpacity": 70,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Nachrichten"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#8b5cf6"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Köpfe"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#f59e0b"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   },
+   "timeFrom": "90d",
+   "hideTimeOverride": false
+  },
+  {
+   "type": "bargauge",
+   "id": 13,
+   "title": "🏆 Top-Schreiber (Zeitraum)",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 18,
+    "w": 6,
+    "h": 13
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT MAX(name) AS Name, COUNT(*) AS Nachrichten FROM fred_archiv_oeffentlich WHERE $__timeFilter(zeit) AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL GROUP BY user_id ORDER BY Nachrichten DESC LIMIT 12"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "decimals": 0,
+     "min": 0,
+     "color": {
+      "mode": "continuous-BlPu"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "values": true,
+     "calcs": [],
+     "fields": "/^Nachrichten$/"
+    },
+    "orientation": "horizontal",
+    "displayMode": "gradient",
+    "valueMode": "color",
+    "namePlacement": "left",
+    "showUnfilled": true,
+    "sizing": "auto",
+    "minVizHeight": 14,
+    "maxVizHeight": 28
+   }
+  },
+  {
+   "type": "bargauge",
+   "id": 14,
+   "title": "📢 Aktivste Kanäle (Zeitraum)",
+   "description": "",
+   "gridPos": {
+    "x": 6,
+    "y": 18,
+    "w": 6,
+    "h": 13
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT MAX(kanal) AS Kanal, COUNT(*) AS Nachrichten FROM fred_archiv_oeffentlich WHERE $__timeFilter(zeit) AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL GROUP BY kanal_id ORDER BY Nachrichten DESC LIMIT 12"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "decimals": 0,
+     "min": 0,
+     "color": {
+      "mode": "continuous-GrYlRd"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "values": true,
+     "calcs": [],
+     "fields": "/^Nachrichten$/"
+    },
+    "orientation": "horizontal",
+    "displayMode": "gradient",
+    "valueMode": "color",
+    "namePlacement": "left",
+    "showUnfilled": true,
+    "sizing": "auto",
+    "minVizHeight": 14,
+    "maxVizHeight": 28
+   }
+  },
+  {
+   "type": "table",
+   "id": 15,
+   "title": "🔥 Wann ist Betrieb? · 30 Tage, Ortszeit",
+   "description": "Nachrichten je Wochentag und Stunde der letzten 30 Tage (Europe/Berlin).",
+   "gridPos": {
+    "x": 12,
+    "y": 18,
+    "w": 12,
+    "h": 13
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT LPAD(HOUR(t), 2, '0') AS Uhr, SUM(WEEKDAY(t) = 0) AS Mo, SUM(WEEKDAY(t) = 1) AS Di, SUM(WEEKDAY(t) = 2) AS Mi, SUM(WEEKDAY(t) = 3) AS Do, SUM(WEEKDAY(t) = 4) AS Fr, SUM(WEEKDAY(t) = 5) AS Sa, SUM(WEEKDAY(t) = 6) AS So FROM (SELECT CONVERT_TZ(zeit, '+00:00', 'Europe/Berlin') AS t FROM fred_archiv_oeffentlich WHERE zeit > UTC_TIMESTAMP() - INTERVAL 30 DAY AND bot = 0 AND user_id <> 1413591205047959674 AND geloescht IS NULL) x GROUP BY 1 ORDER BY 1"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "center",
+      "cellOptions": {
+       "type": "color-background",
+       "mode": "gradient"
+      },
+      "inspect": true,
+      "minWidth": 40,
+      "width": 96
+     },
+     "color": {
+      "mode": "continuous-purples"
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Uhr"
+      },
+      "properties": [
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "auto"
+        }
+       },
+       {
+        "id": "custom.width",
+        "value": 52
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "table",
+   "id": 16,
+   "title": "🎙️ Gerade im Voice",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 31,
+    "w": 8,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT name AS Wer, kanal AS Kanal, TIMESTAMPDIFF(MINUTE, beginn, UTC_TIMESTAMP()) AS Minuten FROM fred_voice_sitzungen WHERE ende IS NULL AND zuletzt > UTC_TIMESTAMP() - INTERVAL 5 MINUTE ORDER BY beginn"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Minuten"
+      },
+      "properties": [
+       {
+        "id": "unit",
+        "value": "m"
+       },
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "gauge",
+         "mode": "lcd"
+        }
+       },
+       {
+        "id": "max",
+        "value": 240
+       },
+       {
+        "id": "color",
+        "value": {
+         "mode": "continuous-GrYlRd"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "bargauge",
+   "id": 17,
+   "title": "⏱️ Voice-Zeit gesamt · Top 10",
+   "description": "",
+   "gridPos": {
+    "x": 8,
+    "y": 31,
+    "w": 8,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT name AS Name, ROUND(sekunden / 3600, 1) AS Stunden FROM fred_voice_summe ORDER BY sekunden DESC LIMIT 10"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "suffix: h",
+     "decimals": 1,
+     "min": 0,
+     "color": {
+      "mode": "continuous-GrYlRd"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "values": true,
+     "calcs": [],
+     "fields": "/^Stunden$/"
+    },
+    "orientation": "horizontal",
+    "displayMode": "gradient",
+    "valueMode": "color",
+    "namePlacement": "left",
+    "showUnfilled": true,
+    "sizing": "auto",
+    "minVizHeight": 14,
+    "maxVizHeight": 28
+   }
+  },
+  {
+   "type": "table",
+   "id": 18,
+   "title": "⭐ Level-Rangliste",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 31,
+    "w": 8,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT username AS Name, level AS Level, xp AS XP, message_count AS Nachrichten FROM mee6_levels ORDER BY xp DESC LIMIT 15"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "XP"
+      },
+      "properties": [
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "gauge",
+         "mode": "gradient"
+        }
+       },
+       {
+        "id": "color",
+        "value": {
+         "mode": "continuous-BlPu"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Level"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 60
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "table",
+   "id": 19,
+   "title": "📡 Live-Ticker · letzte Nachrichten",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 40,
+    "w": 16,
+    "h": 11
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT zeit AS Zeit, name AS Wer, kanal AS Kanal, LEFT(REPLACE(REPLACE(text, '\\n', ' '), '\\r', ' '), 180) AS Nachricht FROM fred_archiv_oeffentlich WHERE geloescht IS NULL AND (bot = 0 OR (user_id = 1413591205047959674 AND kanal NOT LIKE '%log%')) ORDER BY zeit DESC LIMIT 25"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Zeit"
+      },
+      "properties": [
+       {
+        "id": "unit",
+        "value": "dateTimeFromNow"
+       },
+       {
+        "id": "custom.width",
+        "value": 110
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Wer"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 150
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Kanal"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 190
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "table",
+   "id": 20,
+   "title": "🧾 Bot-Ereignisse",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 40,
+    "w": 8,
+    "h": 11
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "mysql",
+      "uid": "fred-ddr"
+     },
+     "refId": "A",
+     "rawQuery": true,
+     "editorMode": "code",
+     "format": "table",
+     "rawSql": "SELECT timestamp AS Zeit, event_type AS Typ, severity AS Stufe, description AS Beschreibung FROM system_events ORDER BY id DESC LIMIT 15"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Zeit"
+      },
+      "properties": [
+       {
+        "id": "unit",
+        "value": "dateTimeFromNow"
+       },
+       {
+        "id": "custom.width",
+        "value": 100
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Stufe"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 70
+       },
+       {
+        "id": "mappings",
+        "value": [
+         {
+          "type": "value",
+          "options": {
+           "INFO": {
+            "color": "#22d3ee",
+            "index": 0
+           },
+           "WARNING": {
+            "color": "#f59e0b",
+            "index": 1
+           },
+           "ERROR": {
+            "color": "#ef4444",
+            "index": 2
+           }
+          }
+         }
+        ]
+       },
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "color-text"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "timeseries",
+   "id": 21,
+   "title": "Discord live · Mitglieder & Online",
+   "description": "Zeitreihe aus fred-relay (Prometheus, 60 s)",
+   "gridPos": {
+    "x": 0,
+    "y": 51,
+    "w": 12,
+    "h": 7
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(discord_members_total)",
+     "legendFormat": "Mitglieder",
+     "format": "time_series"
+    },
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "B",
+     "expr": "max(discord_online_total)",
+     "legendFormat": "Online",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Mitglieder"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#8b5cf6"
+        }
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Online"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#22c55e"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 22,
+   "title": "Nachrichten / Minute (Archiv-Zuwachs)",
+   "description": "",
+   "gridPos": {
+    "x": 12,
+    "y": 51,
+    "w": 12,
+    "h": 7
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "clamp_min(deriv(max(fred_archiv_nachrichten)[15m:1m]), 0) * 60",
+     "legendFormat": "pro Minute",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "pro Minute"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#22d3ee"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "row",
+   "id": 23,
+   "title": "🌍 Weltkarte · Erdbeben · ISS · Ziti-Geräte",
+   "gridPos": {
+    "x": 0,
+    "y": 58,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": false,
+   "panels": []
+  },
+  {
+   "type": "geomap",
+   "id": 24,
+   "title": "Lage der Welt · live",
+   "gridPos": {
+    "x": 0,
+    "y": 59,
+    "w": 16,
+    "h": 17
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "yesoreyeram-infinity-datasource",
+      "uid": "infinity"
+     },
+     "refId": "BEBEN",
+     "type": "json",
+     "source": "url",
+     "format": "table",
+     "parser": "backend",
+     "root_selector": "features",
+     "columns": [
+      {
+       "selector": "geometry.coordinates.1",
+       "text": "lat",
+       "type": "number"
+      },
+      {
+       "selector": "geometry.coordinates.0",
+       "text": "lon",
+       "type": "number"
+      },
+      {
+       "selector": "properties.mag",
+       "text": "Magnitude",
+       "type": "number"
+      },
+      {
+       "selector": "properties.place",
+       "text": "Ort",
+       "type": "string"
+      },
+      {
+       "selector": "properties.time",
+       "text": "Zeit",
+       "type": "timestamp_epoch"
+      }
+     ],
+     "filters": [],
+     "url_options": {
+      "method": "GET",
+      "data": ""
+     },
+     "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
+    },
+    {
+     "datasource": {
+      "type": "yesoreyeram-infinity-datasource",
+      "uid": "infinity"
+     },
+     "refId": "ISS",
+     "type": "json",
+     "source": "url",
+     "format": "table",
+     "parser": "backend",
+     "root_selector": "",
+     "columns": [
+      {
+       "selector": "latitude",
+       "text": "lat",
+       "type": "number"
+      },
+      {
+       "selector": "longitude",
+       "text": "lon",
+       "type": "number"
+      },
+      {
+       "selector": "velocity",
+       "text": "km/h",
+       "type": "number"
+      },
+      {
+       "selector": "altitude",
+       "text": "Höhe km",
+       "type": "number"
+      }
+     ],
+     "filters": [],
+     "url_options": {
+      "method": "GET",
+      "data": ""
+     },
+     "url": "https://api.wheretheiss.at/v1/satellites/25544"
+    },
+    {
+     "datasource": {
+      "type": "yesoreyeram-infinity-datasource",
+      "uid": "infinity"
+     },
+     "refId": "HEIM",
+     "type": "json",
+     "source": "inline",
+     "format": "table",
+     "parser": "backend",
+     "root_selector": "",
+     "columns": [
+      {
+       "selector": "name",
+       "text": "Ort",
+       "type": "string"
+      },
+      {
+       "selector": "lat",
+       "text": "lat",
+       "type": "number"
+      },
+      {
+       "selector": "lon",
+       "text": "lon",
+       "type": "number"
+      }
+     ],
+     "filters": [],
+     "url_options": {
+      "method": "GET",
+      "data": ""
+     },
+     "data": "[{\"name\": \"Heim \\u00b7 Bad K\\u00f6nigshofen\", \"lat\": 50.3, \"lon\": 10.47}]"
+    },
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "ZITI",
+     "expr": "max by (identity, lat, lon, loc) (ziti_identity_online)",
+     "legendFormat": "",
+     "format": "table",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "transformations": [
+    {
+     "id": "labelsToFields",
+     "options": {
+      "mode": "columns"
+     }
+    },
+    {
+     "id": "convertFieldType",
+     "options": {
+      "conversions": [
+       {
+        "targetField": "lat",
+        "destinationType": "number"
+       },
+       {
+        "targetField": "lon",
+        "destinationType": "number"
+       }
+      ],
+      "fields": {}
+     }
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "continuous-YlRd"
+     },
+     "min": 2.5,
+     "max": 7,
+     "custom": {
+      "hideFrom": {
+       "legend": false,
+       "tooltip": false,
+       "viz": false
+      }
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "view": {
+     "id": "coords",
+     "lat": 30,
+     "lon": 12,
+     "zoom": 1.7,
+     "allLayers": true
+    },
+    "controls": {
+     "showZoom": true,
+     "mouseWheelZoom": true,
+     "showAttribution": true,
+     "showScale": false,
+     "showMeasure": false,
+     "showDebug": false
+    },
+    "tooltip": {
+     "mode": "details"
+    },
+    "basemap": {
+     "type": "xyz",
+     "name": "Nacht",
+     "config": {
+      "url": "https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+      "attribution": "Tiles © Esri — Esri, DeLorme, NAVTEQ"
+     }
+    },
+    "layers": [
+     {
+      "type": "markers",
+      "name": "Erdbeben (24 h, ≥ M2.5)",
+      "config": {
+       "style": {
+        "symbol": {
+         "mode": "fixed",
+         "fixed": "img/icons/marker/circle.svg"
+        },
+        "opacity": 0.75,
+        "rotation": {
+         "fixed": 0,
+         "mode": "mod",
+         "min": -360,
+         "max": 360
+        },
+        "symbolAlign": {
+         "horizontal": "center",
+         "vertical": "center"
+        },
+        "size": {
+         "field": "Magnitude",
+         "fixed": 6,
+         "min": 4,
+         "max": 30
+        },
+        "color": {
+         "field": "Magnitude"
+        }
+       },
+       "showLegend": false
+      },
+      "location": {
+       "mode": "coords",
+       "latitude": "lat",
+       "longitude": "lon"
+      },
+      "filterData": {
+       "id": "byRefId",
+       "options": "BEBEN"
+      },
+      "tooltip": true,
+      "opacity": 1
+     },
+     {
+      "type": "markers",
+      "name": "ISS",
+      "config": {
+       "style": {
+        "symbol": {
+         "mode": "fixed",
+         "fixed": "img/icons/marker/star.svg"
+        },
+        "opacity": 0.75,
+        "rotation": {
+         "fixed": 0,
+         "mode": "mod",
+         "min": -360,
+         "max": 360
+        },
+        "symbolAlign": {
+         "horizontal": "center",
+         "vertical": "center"
+        },
+        "size": {
+         "fixed": 18,
+         "min": 4,
+         "max": 30
+        },
+        "color": {
+         "fixed": "#22d3ee"
+        }
+       },
+       "showLegend": false
+      },
+      "location": {
+       "mode": "coords",
+       "latitude": "lat",
+       "longitude": "lon"
+      },
+      "filterData": {
+       "id": "byRefId",
+       "options": "ISS"
+      },
+      "tooltip": true,
+      "opacity": 1
+     },
+     {
+      "type": "markers",
+      "name": "Heim",
+      "config": {
+       "style": {
+        "symbol": {
+         "mode": "fixed",
+         "fixed": "img/icons/marker/triangle.svg"
+        },
+        "opacity": 0.75,
+        "rotation": {
+         "fixed": 0,
+         "mode": "mod",
+         "min": -360,
+         "max": 360
+        },
+        "symbolAlign": {
+         "horizontal": "center",
+         "vertical": "center"
+        },
+        "size": {
+         "fixed": 14,
+         "min": 4,
+         "max": 20
+        },
+        "color": {
+         "fixed": "#8b5cf6"
+        },
+        "text": {
+         "mode": "field",
+         "field": "Ort",
+         "fixed": ""
+        },
+        "textConfig": {
+         "fontSize": 11,
+         "offsetX": 0,
+         "offsetY": -14,
+         "textAlign": "center",
+         "textBaseline": "middle"
+        }
+       },
+       "showLegend": false
+      },
+      "location": {
+       "mode": "coords",
+       "latitude": "lat",
+       "longitude": "lon"
+      },
+      "filterData": {
+       "id": "byRefId",
+       "options": "HEIM"
+      },
+      "tooltip": true,
+      "opacity": 1
+     },
+     {
+      "type": "markers",
+      "name": "Ziti-Geräte",
+      "config": {
+       "style": {
+        "symbol": {
+         "mode": "fixed",
+         "fixed": "img/icons/marker/square.svg"
+        },
+        "opacity": 0.75,
+        "rotation": {
+         "fixed": 0,
+         "mode": "mod",
+         "min": -360,
+         "max": 360
+        },
+        "symbolAlign": {
+         "horizontal": "center",
+         "vertical": "center"
+        },
+        "size": {
+         "fixed": 10,
+         "min": 4,
+         "max": 20
+        },
+        "color": {
+         "fixed": "#22c55e"
+        }
+       },
+       "showLegend": false
+      },
+      "location": {
+       "mode": "coords",
+       "latitude": "lat",
+       "longitude": "lon"
+      },
+      "filterData": {
+       "id": "byRefId",
+       "options": "ZITI"
+      },
+      "tooltip": true,
+      "opacity": 1
+     }
+    ]
+   }
+  },
+  {
+   "type": "table",
+   "id": 25,
+   "title": "🌋 Stärkste Beben · 24 h",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 59,
+    "w": 8,
+    "h": 11
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "datasource",
+      "uid": "-- Dashboard --"
+     },
+     "refId": "A",
+     "panelId": 24,
+     "withTransforms": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Magnitude"
+      },
+      "properties": [
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "color-background",
+         "mode": "gradient"
+        }
+       },
+       {
+        "id": "color",
+        "value": {
+         "mode": "continuous-YlRd"
+        }
+       },
+       {
+        "id": "min",
+        "value": 2.5
+       },
+       {
+        "id": "max",
+        "value": 7
+       },
+       {
+        "id": "decimals",
+        "value": 1
+       },
+       {
+        "id": "custom.width",
+        "value": 90
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Zeit"
+      },
+      "properties": [
+       {
+        "id": "unit",
+        "value": "dateTimeFromNow"
+       },
+       {
+        "id": "custom.width",
+        "value": 110
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": [
+    {
+     "id": "filterByRefId",
+     "options": {
+      "include": "BEBEN"
+     }
+    },
+    {
+     "id": "organize",
+     "options": {
+      "excludeByName": {
+       "lat": true,
+       "lon": true
+      }
+     }
+    },
+    {
+     "id": "sortBy",
+     "options": {
+      "sort": [
+       {
+        "field": "Magnitude",
+        "desc": true
+       }
+      ]
+     }
+    },
+    {
+     "id": "limit",
+     "options": {
+      "limitField": 12
+     }
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "id": 26,
+   "title": "🛰️ ISS · Geschwindigkeit",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 70,
+    "w": 4,
+    "h": 6
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "datasource",
+      "uid": "-- Dashboard --"
+     },
+     "refId": "A",
+     "panelId": 24,
+     "withTransforms": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "velocitykmh",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22d3ee"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22d3ee",
+        "value": null
+       }
+      ]
+     },
+     "decimals": 0
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "/^km\\/h$/",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   },
+   "transformations": [
+    {
+     "id": "filterByRefId",
+     "options": {
+      "include": "ISS"
+     }
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "id": 27,
+   "title": "🛰️ ISS · Höhe",
+   "description": "",
+   "gridPos": {
+    "x": 20,
+    "y": 70,
+    "w": 4,
+    "h": 6
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "datasource",
+      "uid": "-- Dashboard --"
+     },
+     "refId": "A",
+     "panelId": 24,
+     "withTransforms": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "lengthkm",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#8b5cf6"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#8b5cf6",
+        "value": null
+       }
+      ]
+     },
+     "decimals": 0
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "/^Höhe km$/",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   },
+   "transformations": [
+    {
+     "id": "filterByRefId",
+     "options": {
+      "include": "ISS"
+     }
+    }
+   ]
+  },
+  {
+   "type": "row",
+   "id": 28,
+   "title": "📷 Kameras · Standbild jede Minute (nur mit Login sichtbar)",
+   "gridPos": {
+    "x": 0,
+    "y": 76,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": false,
+   "panels": []
+  },
+  {
+   "type": "text",
+   "id": 29,
+   "title": "🌳 Draußen · Garten",
+   "gridPos": {
+    "x": 0,
+    "y": 77,
+    "w": 6,
+    "h": 11
+   },
+   "transparent": false,
+   "options": {
+    "mode": "html",
+    "content": "<div style=\"height:100%;display:flex;align-items:center;justify-content:center;background:#05070d;border-radius:8px;overflow:hidden\"><a href=\"/kamera/draussen.jpg?t=${__to}\" target=\"_blank\" rel=\"noopener\" style=\"display:block;height:100%;width:100%\"><img src=\"/kamera/draussen.jpg?t=${__to}\" alt=\"🌳 Draußen · Garten\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:contain\"></a></div>"
+   }
+  },
+  {
+   "type": "text",
+   "id": 30,
+   "title": "🐟 Fisheye",
+   "gridPos": {
+    "x": 6,
+    "y": 77,
+    "w": 6,
+    "h": 11
+   },
+   "transparent": false,
+   "options": {
+    "mode": "html",
+    "content": "<div style=\"height:100%;display:flex;align-items:center;justify-content:center;background:#05070d;border-radius:8px;overflow:hidden\"><a href=\"/kamera/fisheye.jpg?t=${__to}\" target=\"_blank\" rel=\"noopener\" style=\"display:block;height:100%;width:100%\"><img src=\"/kamera/fisheye.jpg?t=${__to}\" alt=\"🐟 Fisheye\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:contain\"></a></div>"
+   }
+  },
+  {
+   "type": "text",
+   "id": 31,
+   "title": "🌙 Balkon",
+   "gridPos": {
+    "x": 12,
+    "y": 77,
+    "w": 6,
+    "h": 11
+   },
+   "transparent": false,
+   "options": {
+    "mode": "html",
+    "content": "<div style=\"height:100%;display:flex;align-items:center;justify-content:center;background:#05070d;border-radius:8px;overflow:hidden\"><a href=\"/kamera/balkon.jpg?t=${__to}\" target=\"_blank\" rel=\"noopener\" style=\"display:block;height:100%;width:100%\"><img src=\"/kamera/balkon.jpg?t=${__to}\" alt=\"🌙 Balkon\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:contain\"></a></div>"
+   }
+  },
+  {
+   "type": "text",
+   "id": 32,
+   "title": "🖨️ 3D-Drucker",
+   "gridPos": {
+    "x": 18,
+    "y": 77,
+    "w": 6,
+    "h": 11
+   },
+   "transparent": false,
+   "options": {
+    "mode": "html",
+    "content": "<div style=\"height:100%;display:flex;align-items:center;justify-content:center;background:#05070d;border-radius:8px;overflow:hidden\"><a href=\"/kamera/drucker.jpg?t=${__to}\" target=\"_blank\" rel=\"noopener\" style=\"display:block;height:100%;width:100%\"><img src=\"/kamera/drucker.jpg?t=${__to}\" alt=\"🖨️ 3D-Drucker\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:contain\"></a></div>"
+   }
+  },
+  {
+   "type": "bargauge",
+   "id": 33,
+   "title": "Bildalter je Kamera",
+   "gridPos": {
+    "x": 0,
+    "y": 88,
+    "w": 24,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max by (kamera) (fred_kamera_alter_sekunden)",
+     "legendFormat": "{{kamera}}",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s",
+     "min": 0,
+     "max": 600,
+     "decimals": 0,
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 150
+       },
+       {
+        "color": "#ef4444",
+        "value": 300
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "orientation": "vertical",
+    "displayMode": "lcd",
+    "valueMode": "color",
+    "namePlacement": "auto",
+    "showUnfilled": true,
+    "sizing": "auto"
+   }
+  },
+  {
+   "type": "row",
+   "id": 34,
+   "title": "🏠 Homelab · k3s · Dienste",
+   "gridPos": {
+    "x": 0,
+    "y": 92,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": false,
+   "panels": []
+  },
+  {
+   "type": "gauge",
+   "id": 35,
+   "title": "CPU",
+   "gridPos": {
+    "x": 0,
+    "y": 93,
+    "w": 8,
+    "h": 6
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "(100 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "{{nodename}}",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "min": 0,
+     "max": 100,
+     "decimals": 0,
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 70
+       },
+       {
+        "color": "#ef4444",
+        "value": 90
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "showThresholdMarkers": true,
+    "showThresholdLabels": false,
+    "sizing": "auto",
+    "minVizWidth": 75,
+    "minVizHeight": 75
+   }
+  },
+  {
+   "type": "gauge",
+   "id": 36,
+   "title": "RAM",
+   "gridPos": {
+    "x": 8,
+    "y": 93,
+    "w": 8,
+    "h": 6
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "((1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "{{nodename}}",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "min": 0,
+     "max": 100,
+     "decimals": 0,
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 70
+       },
+       {
+        "color": "#ef4444",
+        "value": 90
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "showThresholdMarkers": true,
+    "showThresholdLabels": false,
+    "sizing": "auto",
+    "minVizWidth": 75,
+    "minVizHeight": 75
+   }
+  },
+  {
+   "type": "gauge",
+   "id": 37,
+   "title": "Platte /",
+   "gridPos": {
+    "x": 16,
+    "y": 93,
+    "w": 8,
+    "h": 6
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "((1 - node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"}) * 100) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "{{nodename}}",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "min": 0,
+     "max": 100,
+     "decimals": 0,
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 70
+       },
+       {
+        "color": "#ef4444",
+        "value": 90
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "showThresholdMarkers": true,
+    "showThresholdLabels": false,
+    "sizing": "auto",
+    "minVizWidth": 75,
+    "minVizHeight": 75
+   }
+  },
+  {
+   "type": "state-timeline",
+   "id": 38,
+   "title": "Dienste erreichbar? (TCP, 60 s)",
+   "gridPos": {
+    "x": 0,
+    "y": 99,
+    "w": 16,
+    "h": 12
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max by (instance) (probe_success{job=\"homelab-dienste\"})",
+     "legendFormat": "{{instance}}",
+     "format": "time_series"
+    }
+   ],
+   "transformations": [
+    {
+     "id": "renameByRegex",
+     "options": {
+      "regex": "^([^.]+)\\.([^.]+)\\..*$",
+      "renamePattern": "$1 · $2"
+     }
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#ef4444",
+        "value": null
+       },
+       {
+        "color": "#22c55e",
+        "value": 1
+       }
+      ]
+     },
+     "mappings": [
+      {
+       "type": "value",
+       "options": {
+        "0": {
+         "text": "weg",
+         "color": "#ef4444"
+        },
+        "1": {
+         "text": "da",
+         "color": "#22c55e"
+        }
+       }
+      }
+     ],
+     "custom": {
+      "fillOpacity": 80,
+      "lineWidth": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "showValue": "never",
+    "mergeValues": true,
+    "alignValue": "left",
+    "rowHeight": 0.85,
+    "legend": {
+     "showLegend": false
+    },
+    "tooltip": {
+     "mode": "single"
+    }
+   }
+  },
+  {
+   "type": "stat",
+   "id": 39,
+   "title": "Pods laufen",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 99,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum(kube_pod_status_phase{phase=\"Running\"})",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22c55e"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 40,
+   "title": "Pods hängen",
+   "description": "",
+   "gridPos": {
+    "x": 20,
+    "y": 99,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum(kube_pod_status_phase{phase=~\"Pending|Failed|Unknown\"}) or vector(0)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 1
+       },
+       {
+        "color": "#ef4444",
+        "value": 3
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 41,
+   "title": "Neustarts 24 h",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 103,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum(increase(kube_pod_container_status_restarts_total[24h]))",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#f59e0b",
+        "value": 3
+       },
+       {
+        "color": "#ef4444",
+        "value": 10
+       }
+      ]
+     },
+     "decimals": 0
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 42,
+   "title": "Ziti online",
+   "description": "",
+   "gridPos": {
+    "x": 20,
+    "y": 103,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(ziti_identities_online_total)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#22d3ee"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22d3ee",
+        "value": null
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 43,
+   "title": "Dienste down",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 107,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "count(probe_success{job=\"homelab-dienste\"} == 0) or vector(0)",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#22c55e",
+        "value": null
+       },
+       {
+        "color": "#ef4444",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 44,
+   "title": "Internet",
+   "description": "",
+   "gridPos": {
+    "x": 20,
+    "y": 107,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "avg(probe_duration_seconds{job=\"internet\"})",
+     "legendFormat": "",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s",
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#8b5cf6"
+     },
+     "mappings": [],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#8b5cf6",
+        "value": null
+       }
+      ]
+     },
+     "decimals": 2
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 45,
+   "title": "CPU je Knoten",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 111,
+    "w": 8,
+    "h": 8
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "(100 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "{{nodename}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 46,
+   "title": "Netz rein/raus je Knoten",
+   "description": "",
+   "gridPos": {
+    "x": 8,
+    "y": 111,
+    "w": 8,
+    "h": 8
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum by (instance) (rate(node_network_receive_bytes_total{device!~\"lo|veth.*|cni.*|flannel.*\"}[5m])) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "⬇ {{nodename}}",
+     "format": "time_series"
+    },
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "B",
+     "expr": "-sum by (instance) (rate(node_network_transmit_bytes_total{device!~\"lo|veth.*|cni.*|flannel.*\"}[5m])) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "⬆ {{nodename}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "Bps",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 10,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 47,
+   "title": "Temperatur je Knoten",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 111,
+    "w": 8,
+    "h": 8
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max by (instance) (node_hwmon_temp_celsius) * on(instance) group_left(nodename) node_uname_info",
+     "legendFormat": "{{nodename}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "celsius",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 5,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 48,
+   "title": "MySQL Abfragen / s",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 119,
+    "w": 8,
+    "h": 7
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum(rate(mysql_global_status_queries[5m]))",
+     "legendFormat": "Abfragen",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Abfragen"
+      },
+      "properties": [
+       {
+        "id": "color",
+        "value": {
+         "mode": "fixed",
+         "fixedColor": "#f59e0b"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 49,
+   "title": "RAM je Namespace (Top 8)",
+   "description": "",
+   "gridPos": {
+    "x": 8,
+    "y": 119,
+    "w": 16,
+    "h": 7
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "topk(8, sum by (namespace) (container_memory_working_set_bytes{container!=\"\", image!=\"\"}))",
+     "legendFormat": "{{namespace}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "bytes",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 35,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "normal",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "right",
+     "showLegend": true
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "row",
+   "id": 50,
+   "title": "🤖 Jarvis · Sissyphus",
+   "gridPos": {
+    "x": 0,
+    "y": 126,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": false,
+   "panels": []
+  },
+  {
+   "type": "table",
+   "id": 51,
+   "title": "Jarvis' Reich · live",
+   "description": "",
+   "gridPos": {
+    "x": 0,
+    "y": 127,
+    "w": 8,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "yesoreyeram-infinity-datasource",
+      "uid": "infinity"
+     },
+     "refId": "A",
+     "type": "json",
+     "source": "url",
+     "format": "table",
+     "parser": "backend",
+     "root_selector": "chips",
+     "columns": [
+      {
+       "selector": "label",
+       "text": "Bereich",
+       "type": "string"
+      },
+      {
+       "selector": "wert",
+       "text": "Stand",
+       "type": "string"
+      },
+      {
+       "selector": "zustand",
+       "text": "Zustand",
+       "type": "string"
+      }
+     ],
+     "filters": [],
+     "url_options": {
+      "method": "GET",
+      "data": ""
+     },
+     "url": "https://jarvis-proxy.sissyphus.svc.cluster.local/jarvis/api/reich"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "align": "auto",
+      "cellOptions": {
+       "type": "auto"
+      },
+      "inspect": true
+     }
+    },
+    "overrides": [
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Zustand"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 90
+       },
+       {
+        "id": "custom.cellOptions",
+        "value": {
+         "type": "color-background",
+         "mode": "basic"
+        }
+       },
+       {
+        "id": "mappings",
+        "value": [
+         {
+          "type": "value",
+          "options": {
+           "ok": {
+            "text": "● ok",
+            "color": "#22c55e",
+            "index": 0
+           },
+           "warn": {
+            "text": "● Hinweis",
+            "color": "#f59e0b",
+            "index": 1
+           },
+           "aus": {
+            "text": "○ aus",
+            "color": "#475569",
+            "index": 2
+           },
+           "fehler": {
+            "text": "● Fehler",
+            "color": "#ef4444",
+            "index": 3
+           }
+          }
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Bereich"
+      },
+      "properties": [
+       {
+        "id": "custom.width",
+        "value": 130
+       }
+      ]
+     }
+    ]
+   },
+   "options": {
+    "showHeader": true,
+    "cellHeight": "sm",
+    "footer": {
+     "show": false
+    },
+    "sortBy": []
+   },
+   "transformations": []
+  },
+  {
+   "type": "stat",
+   "id": 52,
+   "title": "Jarvis erreichbar",
+   "description": "",
+   "gridPos": {
+    "x": 8,
+    "y": 127,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(probe_success{job=\"homelab-dienste\", instance=~\"jarvis-proxy.*\"}) or vector(0)",
+     "legendFormat": "",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [
+      {
+       "type": "value",
+       "options": {
+        "1": {
+         "text": "WACH",
+         "color": "#22c55e"
+        },
+        "0": {
+         "text": "STUMM",
+         "color": "#ef4444"
+        }
+       }
+      }
+     ],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#ef4444",
+        "value": null
+       },
+       {
+        "color": "#22c55e",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "stat",
+   "id": 53,
+   "title": "Jarvis-Browser",
+   "description": "",
+   "gridPos": {
+    "x": 12,
+    "y": 127,
+    "w": 4,
+    "h": 4
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "max(kube_deployment_status_replicas_available{namespace=\"sissyphus\", deployment=\"jarvis-browser\"}) or vector(0)",
+     "legendFormat": "",
+     "format": "time_series",
+     "instant": true,
+     "range": false
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "thresholds"
+     },
+     "mappings": [
+      {
+       "type": "range",
+       "options": {
+        "from": 1,
+        "to": 99,
+        "result": {
+         "text": "BEREIT",
+         "color": "#22c55e"
+        }
+       }
+      },
+      {
+       "type": "value",
+       "options": {
+        "0": {
+         "text": "AUS",
+         "color": "#ef4444"
+        }
+       }
+      }
+     ],
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "#ef4444",
+        "value": null
+       },
+       {
+        "color": "#22c55e",
+        "value": 1
+       }
+      ]
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "background_solid",
+    "graphMode": "none",
+    "justifyMode": "center",
+    "textMode": "value",
+    "wideLayout": true,
+    "showPercentChange": false
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 54,
+   "title": "Sissyphus · CPU",
+   "description": "",
+   "gridPos": {
+    "x": 16,
+    "y": 127,
+    "w": 8,
+    "h": 9
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"sissyphus\", container!=\"\"}[5m]))",
+     "legendFormat": "{{pod}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "hidden",
+     "showLegend": false
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "timeseries",
+   "id": 55,
+   "title": "Sissyphus · RAM",
+   "description": "",
+   "gridPos": {
+    "x": 8,
+    "y": 131,
+    "w": 8,
+    "h": 5
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "prometheus",
+      "uid": "prometheus"
+     },
+     "refId": "A",
+     "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"sissyphus\", container!=\"\", image!=\"\"})",
+     "legendFormat": "{{pod}}",
+     "format": "time_series"
+    }
+   ],
+   "fieldConfig": {
+    "defaults": {
+     "unit": "bytes",
+     "color": {
+      "mode": "palette-classic"
+     },
+     "custom": {
+      "drawStyle": "line",
+      "lineWidth": 2,
+      "fillOpacity": 18,
+      "gradientMode": "opacity",
+      "lineInterpolation": "smooth",
+      "showPoints": "never",
+      "stacking": {
+       "mode": "none",
+       "group": "A"
+      },
+      "barAlignment": 0,
+      "axisSoftMin": 0
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "hidden",
+     "showLegend": false
+    },
+    "tooltip": {
+     "mode": "multi",
+     "sort": "desc"
+    }
+   }
+  },
+  {
+   "type": "row",
+   "id": 57,
+   "title": "🟣 Jarvis öffnen – mit ihm sprechen (Klick zum Aufklappen)",
+   "gridPos": {
+    "x": 0,
+    "y": 136,
+    "w": 24,
+    "h": 1
+   },
+   "collapsed": true,
+   "panels": [
+    {
+     "type": "text",
+     "id": 56,
+     "title": "Jarvis · Gesicht & Stimme (Mikrofon im Browser freigeben)",
+     "gridPos": {
+      "x": 0,
+      "y": 137,
+      "w": 24,
+      "h": 22
+     },
+     "transparent": false,
+     "options": {
+      "mode": "html",
+      "content": "<iframe src=\"https://jarvis.benz-sw.de/jarvis\" title=\"Jarvis\" allow=\"microphone; autoplay; clipboard-write\" style=\"width:100%;height:100%;border:0;border-radius:10px;background:#05070d\"></iframe>"
+     }
+    }
+   ]
+  }
+ ]
+}

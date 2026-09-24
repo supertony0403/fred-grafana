@@ -1,0 +1,76 @@
+# Fred-Relay: Prometheus-Exporter (Discord + Fred-DB + Kamera-Frische) und Kamera-Relay.
+# Code: ConfigMap fred-relay-code (aus relay/fred_relay.py, siehe deploy.sh).
+# Secret fred-relay-env wird NICHT hier verwaltet (DISCORD_TOKEN, MYSQL_*, HA_BASE, HA_KAMERA_ORDNER).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fred-relay
+  namespace: monitoring
+  labels: {app: fred-relay}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: fred-relay}}
+  template:
+    metadata:
+      labels: {app: fred-relay}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: relay
+          image: python:3.12-slim
+          command: ["sh", "-c", "pip install --quiet --no-cache-dir --target /tmp/pylib pymysql==1.1.1 && PYTHONPATH=/tmp/pylib exec python -u /app/fred_relay.py"]
+          env:
+            - {name: PIP_DISABLE_PIP_VERSION_CHECK, value: "1"}
+            - {name: HOME, value: /tmp}
+          envFrom: [{secretRef: {name: fred-relay-env}}]
+          ports: [{name: http, containerPort: 8080}]
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 10, periodSeconds: 15}
+          livenessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 60, periodSeconds: 30}
+          resources:
+            requests: {cpu: 20m, memory: 48Mi}
+            limits: {memory: 192Mi}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          volumeMounts:
+            - {name: code, mountPath: /app, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: code
+          configMap: {name: fred-relay-code}
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fred-relay
+  namespace: monitoring
+  labels: {app: fred-relay}
+spec:
+  selector: {app: fred-relay}
+  ports: [{name: http, port: 8080, targetPort: http}]
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fred-relay
+  namespace: monitoring
+  labels: {release: kps}
+spec:
+  selector: {matchLabels: {app: fred-relay}}
+  endpoints: [{port: http, path: /metrics, interval: 60s, scrapeTimeout: 10s}]
+---
+# Kamerabilder und Metriken nur fuer den Grafana-Proxy (hinter dem Login) und Prometheus.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: fred-relay-nur-proxy-und-prometheus
+  namespace: monitoring
+spec:
+  podSelector: {matchLabels: {app: fred-relay}}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector: {matchLabels: {app: grafana-proxy}}
+        - podSelector: {matchLabels: {app.kubernetes.io/name: prometheus}}
+      ports: [{port: 8080, protocol: TCP}]
