@@ -24,6 +24,17 @@ kubectl -n $NS create configmap grafana-dashboard-fred \
   --from-file=fred-command-center.json=dashboard/fred-command-center.json \
   --dry-run=client -o yaml | kubectl label --local -f - grafana_dashboard=1 -o yaml | kubectl apply -f -
 
+# kamera.benz-sw.de (Secret kamera-web-htpasswd verwaltet dieses Skript nicht, siehe README)
+kubectl -n $NS get secret kamera-web-htpasswd >/dev/null || {
+  echo "Secret kamera-web-htpasswd fehlt – siehe README." >&2; exit 1; }
+docker run --rm \
+  -v "$PWD/kamera-web/nginx.conf:/etc/nginx/nginx.conf:ro" nginx:1.27-alpine sh -c \
+  'mkdir -p /certs /auth && touch /auth/htpasswd && apk add -q openssl >/dev/null 2>&1 && openssl req -x509 -newkey rsa:2048 -nodes -subj /CN=t -keyout /certs/tls.key -out /certs/tls.crt -days 1 2>/dev/null && nginx -t -q'
+kubectl -n $NS create configmap kamera-web-conf \
+  --from-file=nginx.conf=kamera-web/nginx.conf --from-file=index.html=kamera-web/index.html \
+  --dry-run=client -o yaml | kubectl apply -f -
+kubectl apply -f k8s/kamera-web.yaml
+
 kubectl -n $NS create configmap grafana-proxy-conf --from-file=nginx.conf=k8s/grafana-proxy-nginx.conf \
   --dry-run=client -o yaml | kubectl apply -f -
 
@@ -33,6 +44,10 @@ kubectl -n $NS patch deploy/fred-relay --type merge -p \
 kubectl -n $NS patch deploy/grafana-proxy --type merge -p \
   "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"fred/nginx-sha\":\"$(summe k8s/grafana-proxy-nginx.conf)\"}}}}}"
 
+kubectl -n $NS patch deploy/kamera-web --type merge -p \
+  "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"fred/kamera-sha\":\"$(cat kamera-web/nginx.conf kamera-web/index.html | sha256sum | cut -c1-16)\"}}}}}"
+
 kubectl -n $NS rollout status deploy/fred-relay --timeout=180s
+kubectl -n $NS rollout status deploy/kamera-web --timeout=180s
 kubectl -n $NS rollout status deploy/grafana-proxy --timeout=180s
 echo "fertig: https://grafana.benz-sw.de/d/fred-command-center"

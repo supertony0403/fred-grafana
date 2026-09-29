@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fisheye · Kamera</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0d10; color: #c9d1d9;
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { height: 100%; display: grid; grid-template-rows: 1fr auto; }
+  .bild { min-height: 0; display: grid; place-items: center; }
+  img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  footer { display: flex; gap: .6rem; align-items: center; padding: .5rem 1rem;
+    border-top: 1px solid #1f242c; font-variant-numeric: tabular-nums; }
+  .punkt { width: .55rem; height: .55rem; border-radius: 50%; background: #3fb950; }
+  .punkt.alt { background: #d29922; }
+  .punkt.fehler { background: #f85149; }
+  .rechts { margin-left: auto; opacity: .6; }
+</style>
+</head>
+<body>
+<main>
+  <div class="bild"><img id="bild" src="fisheye.jpg" alt="Fisheye-Kamera"></div>
+  <footer>
+    <span class="punkt" id="punkt"></span>
+    <span id="status">lädt …</span>
+    <span class="rechts">Fisheye · Bild von Home Assistant, etwa einmal pro Minute neu</span>
+  </footer>
+</main>
+<script>
+  const INTERVALL_MS = 5000;
+  const ZEITGRENZE_MS = 15000;
+  const ALT_AB_S = 150;        // HA liefert etwa einmal pro Minute ein Bild
+  let bild = document.getElementById("bild");
+  const punkt = document.getElementById("punkt");
+  const status = document.getElementById("status");
+  let geladenUm = null;        // letzter erfolgreicher Bildabruf (Browserzeit)
+  let bildAlterS = null;       // Alter des Kamerabilds laut Relay
+  let fehler = false;
+  let laeuft = false;
+
+  function zeigeStatus() {
+    const alt = bildAlterS !== null && bildAlterS > ALT_AB_S;
+    punkt.className = "punkt" + (fehler ? " fehler" : alt ? " alt" : "");
+    const teile = [];
+    if (fehler) teile.push("Verbindung gestört");
+    if (alt) teile.push("Kamera liefert keine neuen Bilder");
+    if (bildAlterS !== null) teile.push("Bild ist " + Math.round(bildAlterS) + " s alt");
+    teile.push(geladenUm ? "geladen " + geladenUm.toLocaleTimeString("de-DE") : "noch kein Bild");
+    status.textContent = teile.join(" · ");
+  }
+
+  async function holeAlter() {
+    try {
+      const r = await fetch(location.origin + "/status", { cache: "no-store", signal: AbortSignal.timeout(ZEITGRENZE_MS) });
+      const d = (await r.json()).fisheye;
+      bildAlterS = d && d.ok && typeof d.alter_s === "number" ? d.alter_s : Infinity;
+    } catch { /* Bildabruf entscheidet über "gestört" */ }
+  }
+
+  function neuLaden() {
+    if (laeuft || document.hidden) return;
+    laeuft = true;
+    const neu = new Image();
+    neu.alt = bild.alt;
+    const waechter = setTimeout(() => {
+      neu.onload = neu.onerror = null; neu.src = "";
+      laeuft = false; fehler = true; zeigeStatus();
+    }, ZEITGRENZE_MS);
+    neu.onload = () => {
+      clearTimeout(waechter);
+      neu.id = "bild"; bild.replaceWith(neu); bild = neu;
+      geladenUm = new Date(); fehler = false; laeuft = false; zeigeStatus();
+    };
+    neu.onerror = () => { clearTimeout(waechter); laeuft = false; fehler = true; zeigeStatus(); };
+    neu.src = "fisheye.jpg?t=" + Date.now();
+    holeAlter().then(zeigeStatus);
+  }
+
+  bild.addEventListener("load", () => { geladenUm = new Date(); zeigeStatus(); }, { once: true });
+  bild.addEventListener("error", () => { fehler = true; zeigeStatus(); }, { once: true });
+  holeAlter().then(zeigeStatus);
+  setInterval(neuLaden, INTERVALL_MS);
+  document.addEventListener("visibilitychange", neuLaden);
+</script>
+</body>
+</html>

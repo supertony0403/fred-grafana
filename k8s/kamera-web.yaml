@@ -1,0 +1,62 @@
+# kamera.benz-sw.de: Fisheye-Kamera als Live-Bild, geschuetzt per HTTP-Basic-Auth.
+# Zugangsdaten stehen NICHT hier (oeffentliches Repo) – Secret kamera-web-htpasswd, siehe README.
+# Erreichbar nur ueber Ziti (Dienst "kamera").
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kamera-le
+  namespace: monitoring
+spec:
+  secretName: kamera-tls
+  issuerRef: {kind: ClusterIssuer, name: letsencrypt-prod}
+  dnsNames: [kamera.benz-sw.de]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kamera-web
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: kamera-web}}
+  template:
+    metadata:
+      labels: {app: kamera-web}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          # cert-manager erneuert kamera-tls im Secret-Volume; nginx liest es nur beim (Re-)Load,
+          # deshalb taeglich neu laden.
+          command: ["sh", "-c", "(while sleep 86400; do nginx -s reload; done) & exec nginx -g 'daemon off;'"]
+          securityContext:
+            allowPrivilegeEscalation: false
+          ports: [{name: https, containerPort: 443}]
+          volumeMounts:
+            - {name: conf, mountPath: /etc/nginx/nginx.conf, subPath: nginx.conf, readOnly: true}
+            - {name: conf, mountPath: /usr/share/nginx/html/index.html, subPath: index.html, readOnly: true}
+            - {name: auth, mountPath: /auth, readOnly: true}
+            - {name: tls, mountPath: /certs, readOnly: true}
+          readinessProbe:
+            tcpSocket: {port: https}
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 5m, memory: 16Mi}
+            limits: {memory: 64Mi}
+      volumes:
+        - name: conf
+          configMap: {name: kamera-web-conf}
+        - name: auth
+          secret: {secretName: kamera-web-htpasswd}
+        - name: tls
+          secret: {secretName: kamera-tls}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kamera-web
+  namespace: monitoring
+spec:
+  selector: {app: kamera-web}
+  ports: [{name: https, port: 443, targetPort: https}]

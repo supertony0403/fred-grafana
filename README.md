@@ -65,3 +65,19 @@ Er steht nur im Secret `monitoring/fred-relay-env` (`HA_KAMERA_ORDNER`) und in d
 # Code- oder nginx-Änderungen starten Relay/Proxy über Prüfsummen-Annotationen selbst neu;
 # die nginx-Konfiguration wird vorher per `nginx -t` (Docker) geprüft.
 ```
+
+## kamera.benz-sw.de (Fisheye live)
+
+`kamera-web` (nginx, ns `monitoring`) zeigt die Fisheye-Kamera und lädt das Bild alle 5 s neu.
+Die Quelle (HA-Automation) liefert etwa einmal pro Minute ein neues Bild, das Relay cacht 20 s.
+Nur `/fisheye.jpg` wird zum Relay durchgereicht; alles steht hinter HTTP-Basic-Auth, erreichbar
+nur über Ziti (Dienst `kamera`, angelegt mit `NextCloud-Cluster/manifests/ziti_add_service.py`).
+
+Zugangsdaten liegen nur im Cluster:
+
+```sh
+read -rs PW   # Passwort landet so nicht in der Shell-History
+kubectl -n monitoring create secret generic kamera-web-htpasswd \
+  --from-literal=htpasswd="BENUTZER:$(printf '%s' "$PW" | openssl passwd -6 -stdin)" \
+  --dry-run=client -o yaml | kubectl apply -f -
+```

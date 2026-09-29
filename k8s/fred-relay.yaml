@@ -60,7 +60,8 @@ spec:
   selector: {matchLabels: {app: fred-relay}}
   endpoints: [{port: http, path: /metrics, interval: 60s, scrapeTimeout: 10s}]
 ---
-# Kamerabilder und Metriken nur fuer den Grafana-Proxy (hinter dem Login) und Prometheus.
+# Kamerabilder und Metriken nur fuer den Grafana-Proxy (hinter dem Login), kamera-web
+# (Basic-Auth, reicht nur fisheye.jpg durch) und Prometheus.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -72,5 +73,6 @@ spec:
   ingress:
     - from:
         - podSelector: {matchLabels: {app: grafana-proxy}}
+        - podSelector: {matchLabels: {app: kamera-web}}
         - podSelector: {matchLabels: {app.kubernetes.io/name: prometheus}}
       ports: [{port: 8080, protocol: TCP}]
